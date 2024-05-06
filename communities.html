@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Student Community</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .post {
+            max-width: 600px;
+            margin: 0 auto 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .post img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            margin-bottom: 10px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-actions button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .post-actions button:hover {
+            background-color: #0056b3;
+        }
+        img {
+            max-width: 1000px;
+            max-height: 1000px;
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Student Community</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><span id="username-placeholder"></span></li>
+                <div class="cta-buttons">
+                    <li><a href="#" onclick="logout()" id="logout-btn">Logout</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="post-form">
+            <h2>Create a Post</h2>
+            <textarea id="post-content" placeholder="What's on your mind?"></textarea>
+            <input type="file" id="post-image" accept="image/*">
+            <button onclick="createPost()">Post</button>
+        </section>
+
+        <section id="posts-container">
+            <!-- Posts will be dynamically inserted here -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Student Community</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Function to create a new post
+        function createPost() {
+            // Code to create and append post elements
+            var postContent = document.getElementById("post-content").value;
+            var postImage = document.getElementById("post-image").files[0];
+
+            // Create post element
+            var postElement = document.createElement("div");
+            postElement.classList.add("post");
+
+            // Add post content
+            var postContentElement = document.createElement("p");
+            postContentElement.textContent = postContent;
+            postElement.appendChild(postContentElement);
+
+            // Add post image if available
+            if (postImage) {
+                var postImageElement = document.createElement("img");
+                postImageElement.src = URL.createObjectURL(postImage);
+                postImageElement.setAttribute("width", "1000");
+                postImageElement.setAttribute("height", "1000");
+                postElement.appendChild(postImageElement);
+            }
+
+            // Add post actions (like, comment, share)
+            var postActionsElement = document.createElement("div");
+            postActionsElement.classList.add("post-actions");
+
+            var likeButton = document.createElement("button");
+            likeButton.textContent = "Like";
+            likeButton.onclick = function() {
+                // Increment like counter
+                likeCounter.textContent = parseInt(likeCounter.textContent) + 1;
+            };
+            postActionsElement.appendChild(likeButton);
+
+            var commentButton = document.createElement("button");
+            commentButton.textContent = "Comment";
+            commentButton.onclick = function() {
+                // Display comment input field
+                var commentInput = document.createElement("input");
+                commentInput.type = "text";
+                commentInput.placeholder = "Write a comment...";
+                var commentSubmitButton = document.createElement("button");
+                commentSubmitButton.textContent = "Submit";
+                commentSubmitButton.onclick = function() {
+                    // Create comment element
+                    var commentElement = document.createElement("p");
+                    commentElement.textContent = commentInput.value;
+                    postElement.appendChild(commentElement);
+                };
+                postElement.appendChild(commentInput);
+                postElement.appendChild(commentSubmitButton);
+            };
+            postActionsElement.appendChild(commentButton);
+
+            var shareButton = document.createElement("button");
+            shareButton.textContent = "Share";
+            shareButton.onclick = function() {
+                // Copy post link to clipboard
+                var postLink = window.location.href + "#post" + (document.querySelectorAll(".post").length + 1);
+                navigator.clipboard.writeText(postLink).then(function() {
+                    // Alert message when link is copied
+                    alert("Link copied to clipboard: " + postLink);
+                }).catch(function(error) {
+                    console.error("Error copying link: ", error);
+                });
+            };
+            postActionsElement.appendChild(shareButton);
+
+            postElement.appendChild(postActionsElement);
+
+            // Add post to the posts container
+            var postsContainer = document.getElementById("posts-container");
+            postsContainer.insertBefore(postElement, postsContainer.firstChild);
+
+            // Clear the post form
+            document.getElementById("post-content").value = "";
+            document.getElementById("post-image").value = "";
+        }
+        function logout() {//logout funtion
+        // Clear session or local storage (e.g., remove the user data)
+        sessionStorage.removeItem("user");
+        // Redirect the user to the home page
+        window.location.href = "index.html";
+    }
+    </script>
+</body>
+</html>
