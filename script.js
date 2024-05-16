@@ -1,191 +1,242 @@
-// Check if the user is logged in and if they are on the community page
-function checkLogin() {
-    var isLoggedIn = false; // Change this to your actual logic for checking login status
-    var currentPage = window.location.href;
 
-    if (currentPage.includes("communities.html")) {
-        if (!isLoggedIn) {
-            // If user is not logged in, redirect to login page
-            window.location.href = "login.html";
-        }
-    }
-}
 
-// Call the checkLogin function when the page is loaded
-window.onload = function() {
-    checkLogin();
-};
+            function logout() {//logout funtion
+                // Redirect the user to the home page
+                window.location.href = "index.html";
+            }
 
-// Function to handle form submission
-document.getElementById("login-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent default form submission
 
-    // Get the email and password from the form
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
+           // Function to create a new post
+function createPost() {
+    var postContent = document.getElementById("post-content").value;
+    var postImage = document.getElementById("post-image").files[0];
 
-    // Check if the email and password match the stored data (replace this with your actual data check logic)
-    var isValid = checkCredentials(email, password);
+    var postObject = {
+        content: postContent,
+        image: ""
+    };
 
-    if (isValid) {
-        // If credentials are valid, redirect to the community page
-        window.location.href = "communities.html";
+    if (postImage) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            postObject.image = e.target.result;
+            savePost(postObject);
+        };
+        reader.readAsDataURL(postImage);
     } else {
-        // If credentials are invalid, display error message
-        document.getElementById("error-message").style.display = "block";
-    }
-});
-
-// Function to check if the email and password match the stored data (replace this with your actual data check logic)
-function checkCredentials(email, password) {
-    // Example: Assume email is "user@example.com" and password is "password"
-    return email === "user@example.com" && password === "password";
-}
-
-
-// Check if the user is logged in
-function checkLogin() {
-    var isLoggedIn = true; // Change this to your actual logic for checking login status
-
-    if (isLoggedIn) {
-        document.getElementById("add-post").style.display = "block"; // Show add post form
+        savePost(postObject);
     }
 }
 
-// Call the checkLogin function when the page is loaded
+function savePost(postObject) {
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    posts.push(postObject);
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    // Display the post immediately
+    displayPost(postObject);
+    updateIndexPagePosts();
+}
+
+function displayPost(post) {
+    var postsContainer = document.getElementById("posts-container");
+    var postElement = document.createElement("div");
+    postElement.classList.add("post");
+
+    var postContentElement = document.createElement("p");
+    postContentElement.textContent = post.content;
+    postElement.appendChild(postContentElement);
+
+    if (post.image) {
+        var postImageElement = document.createElement("img");
+        postImageElement.src = post.image;
+        postImageElement.classList.add("post-image");
+        postElement.appendChild(postImageElement);
+    }
+
+    postsContainer.insertBefore(postElement, postsContainer.firstChild);
+}
+
 window.onload = function() {
-    checkLogin();
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    posts.forEach(function(post) {
+        displayPost(post);
+    });
+    displayBanner();
 };
 
-// Function to handle post submission
-document.getElementById("post-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent default form submission
+function updateIndexPagePosts() {
+    var indexPagePosts = JSON.parse(localStorage.getItem("posts")) || [];
+    localStorage.setItem("indexPagePosts", JSON.stringify(indexPagePosts));
+}
 
-    // Get post title and content from the form
-    var title = document.getElementById("post-title").value;
-    var content = document.getElementById("post-content").value;
-    var image = document.getElementById("post-image").files[0]; // Get the selected image file
-
-    // Example: Send post data to server or perform any action
-    console.log("Post Title: " + title);
-    console.log("Post Content: " + content);
-    console.log("Image File: ", image);
-
-    // Reset form fields
-    document.getElementById("post-title").value = "";
-    document.getElementById("post-content").value = "";
-    document.getElementById("post-image").value = ""; // Clear file input
-});
-
-// Function to handle post submission
-document.getElementById("post-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    // Get post title and content from the form
-    var title = document.getElementById("post-title").value;
-    var content = document.getElementById("post-content").value;
-    var image = document.getElementById("post-image").files[0]; // Get the selected image file
-
-    // Example: Send post data to server or perform any action
-    console.log("Post Title: " + title);
-    console.log("Post Content: " + content);
-    console.log("Image File: ", image);
-
-    // Create a new post object
-    var newPost = {
-        title: title,
-        content: content,
-        author: "Current User", // Change to actual username or user ID
-        imageUrl: "" // Placeholder for image URL (will be updated after uploading)
-    };
-
-    // Add the new post to the beginning of the posts array
-    posts.unshift(newPost);
-
-    // Display posts again to show the new post
-    displayPosts();
-
-    // Reset form fields
-    document.getElementById("post-title").value = "";
-    document.getElementById("post-content").value = "";
-    document.getElementById("post-image").value = ""; // Clear file input
-});
-
-
-// Function to handle post submission
-document.getElementById("post-form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    // Get post title and content from the form
-    var title = document.getElementById("post-title").value;
-    var content = document.getElementById("post-content").value;
-    var image = document.getElementById("post-image").files[0]; // Get the selected image file
-
-    // Example: Send post data to server or perform any action
-    console.log("Post Title: " + title);
-    console.log("Post Content: " + content);
-    console.log("Image File: ", image);
-
-    // Create a new post object
-    var newPost = {
-        title: title,
-        content: content,
-        author: "Current User", // Change to actual username or user ID
-        imageUrl: "" // Placeholder for image URL (will be updated after uploading)
-    };
-
-    // Add the new post to the beginning of the posts array
-    posts.unshift(newPost);
-
-    // Call the displayPosts function to update the community page
-    displayPosts();
-
-    // Reset form fields
-    document.getElementById("post-title").value = "";
-    document.getElementById("post-content").value = "";
-    document.getElementById("post-image").value = ""; // Clear file input
-});
-
-// Function to display posts
-function displayPosts() {
-    var container = document.getElementById("community-posts");
-
-    // Clear existing posts
-    container.innerHTML = "";
-
-    // Loop through posts and create HTML elements for each post
-    posts.forEach(function(post) {
-        var postDiv = document.createElement("div");
-        postDiv.classList.add("post");
-
-        var postHeader = document.createElement("div");
-        postHeader.classList.add("post-header");
-        postHeader.innerHTML = "<h3>" + post.title + "</h3><p>Posted by " + post.author + "</p>";
-
-        var postContent = document.createElement("div");
-        postContent.classList.add("post-content");
-        postContent.innerHTML = "<p>" + post.content + "</p>";
-
-        // If post has an image, create an image element and add it to the post
-        if (post.imageUrl) {
-            var postImage = document.createElement("img");
-            postImage.src = post.imageUrl;
-            postContent.appendChild(postImage);
+function changeBanner() {
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = function(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var bannerUrl = event.target.result;
+                localStorage.setItem("banner", bannerUrl);
+                displayBanner();
+                updateIndexPageBanner();
+            };
+            reader.readAsDataURL(file);
         }
+    };
+    fileInput.click();
+}
 
-        postDiv.appendChild(postHeader);    
-        postDiv.appendChild(postContent);
-        container.appendChild(postDiv);
+function displayBanner() {
+    var bannerUrl = localStorage.getItem("banner");
+    if (bannerUrl) {
+        var bannerElement = document.getElementById("banner");
+        if (!bannerElement) {
+            bannerElement = document.createElement("img");
+            bannerElement.id = "banner";
+            document.body.insertBefore(bannerElement, document.body.firstChild);
+        }
+        bannerElement.src = bannerUrl;
+    }
+}
+
+function updateIndexPageBanner() {
+    var bannerUrl = localStorage.getItem("banner");
+    localStorage.setItem("indexPageBanner", bannerUrl);
+}
+
+function viewPosts() {
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    var contentContainer = document.querySelector('.main-content');
+    contentContainer.innerHTML = '';
+
+    var heading = document.createElement('h2');
+    heading.textContent = 'Posts';
+    contentContainer.appendChild(heading);
+
+    var list = document.createElement('ul');
+    posts.forEach(function(post, index) {
+        var listItem = document.createElement('li');
+        listItem.innerHTML = `<p>${post.content}</p>`;
+        if (post.image) {
+            listItem.innerHTML += `<img src="${post.image}" alt="Post Image" style="max-width: 100%;">`;
+        }
+        listItem.innerHTML += `<button onclick="deletePost(${index})">Delete</button>`;
+        list.appendChild(listItem);
+    });
+    contentContainer.appendChild(list);
+}
+
+function deletePost(index) {
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    posts.splice(index, 1);
+    localStorage.setItem("posts", JSON.stringify(posts));
+    viewPosts();
+    updateIndexPagePosts();
+}
+
+function viewRegistrations() {
+    var contentContainer = document.querySelector('.main-content');
+    contentContainer.innerHTML = '';
+
+    var heading = document.createElement('h2');
+    heading.textContent = 'Registrations';
+    contentContainer.appendChild(heading);
+
+    var registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+    var list = document.createElement('ul');
+    registrations.forEach(function(registration) {
+        var listItem = document.createElement('li');
+        listItem.textContent = registration;
+        list.appendChild(listItem);
+    });
+    contentContainer.appendChild(list);
+}
+
+function addEvent() {
+    var eventName = prompt("Enter event name:");
+    if (eventName) {
+        var events = JSON.parse(localStorage.getItem("events")) || [];
+        events.push(eventName);
+        localStorage.setItem("events", JSON.stringify(events));
+        alert("Event added successfully!");
+    }
+}
+
+
+
+    // Function to create a new post
+function createPost() {
+    var postContent = document.getElementById("post-content").value;
+    var postImage = document.getElementById("post-image").files[0];
+    var email = getEmail(); // Function to get the email of the student
+
+    // Create post object
+    var postObject = {
+        content: postContent,
+        image: postImage ? URL.createObjectURL(postImage) : null,
+        email: email
+    };
+
+    // Store the new post in local storage
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    posts.push(postObject);
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    // Display the post immediately
+    displayPost(postObject);
+
+    // Clear the post form
+    document.getElementById("post-content").value = "";
+    document.getElementById("post-image").value = "";
+}
+
+// Function to get the email of the student
+function getEmail() {
+    // You need to implement this function to get the email of the current user
+    // For demonstration purposes, I'll just return a static email
+    return "student@example.com";
+}
+
+// Function to display existing posts when the page loads
+window.onload = function() {
+    displayExistingPosts();
+};
+
+// Function to display existing posts from local storage
+function displayExistingPosts() {
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    posts.forEach(function(post) {
+        displayPost(post);
     });
 }
 
-    function logout() {//logout funtion
-        // Clear session or local storage (e.g., remove the user data)
-        sessionStorage.removeItem("user");
-        // Redirect the user to the home page
-        window.location.href = "index.html";
+// Function to display a post
+function displayPost(post) {
+    var postsContainer = document.getElementById("posts-container");
+    var postElement = document.createElement("div");
+    postElement.classList.add("post");
+
+    // Add post content (caption)
+    var postContentElement = document.createElement("p");
+    postContentElement.textContent = post.content;
+    postElement.appendChild(postContentElement);
+
+    // Check if the post contains an image
+    if (post.image) {
+        var postImageElement = document.createElement("img");
+        postImageElement.src = post.image;
+        postImageElement.classList.add("post-image");
+        postElement.appendChild(postImageElement);
     }
 
+    // Add email
+    var postUserElement = document.createElement("p");
+    postUserElement.textContent = "Posted by: " + post.email;
+    postElement.appendChild(postUserElement);
 
-
-
+    postsContainer.insertBefore(postElement, postsContainer.firstChild);
+}

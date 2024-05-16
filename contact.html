@@ -13,7 +13,6 @@
         </div>
         <div class="cta-buttons">
             <a href="login.html" class="login-btn">Login</a>
-            <a href="signup.html" class="signup-btn">Signup</a>
         </div>
     </header>
 
@@ -26,9 +25,18 @@
         </ul>
     </nav>
 
-
     <main>
+        <div class="login-container">
         <section>
+                   
+            <h3>Send us a message:</h3>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Your Name" required><br>
+                <input type="email" id="email" placeholder="Your Email" required><br>
+                <textarea id="message" placeholder="Your Message" required></textarea><br>
+                <button type="submit">Send</button>
+            </form>
+
             <h2>Contact Us</h2>
             <p>Have a question or feedback? Reach out to us:</p>
             <ul>
@@ -36,11 +44,43 @@
                 <li>Phone: +91 96253 96398</li>
                 <li>Address: Shimla</li>
             </ul>
+        
         </section>
+    </div>
     </main>
 
     <footer>
         <p>&copy; 2024 Student Community</p>
     </footer>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var message = document.getElementById("message").value;
+
+            var contactData = {
+                name: name,
+                email: email,
+                message: message
+            };
+
+            // Check if local storage is supported
+            if (typeof(Storage) !== "undefined") {
+                // Retrieve existing data or initialize an empty array
+                var existingData = JSON.parse(localStorage.getItem("contactData")) || [];
+                // Add new contact data to the array
+                existingData.push(contactData);
+                // Store the updated data back to local storage
+                localStorage.setItem("contactData", JSON.stringify(existingData));
+                alert("Message sent! We'll get back to you soon.");
+                document.getElementById("contactForm").reset();
+            } else {
+                alert("Local storage is not supported in this browser.");
+            }
+        });
+    </script>
 </body>
 </html>

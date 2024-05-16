@@ -64,7 +64,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #ffd700; /* Change color on hover */
+    color: #ffd0fd; /* Change color on hover */
 }
 
 main {
@@ -91,12 +91,129 @@ h2 {
 footer {
     background-color: #333;
     color: #fff;
+    height: auto;
     text-align: center;
-    padding: 10px 0;
     position: fixed;
     bottom: 0;
     width: 100%;
 }
+
+/* Add CSS for photos and captions */
+main {
+    padding: 50px 0;
+}
+
+.photo-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping of photo containers */
+}
+
+.photo-container {
+    margin: 10px;
+    overflow: hidden;
+    position: relative;
+    width: 300px;
+    height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.photo-container:hover {
+    transform: scale(1.05); /* Enlarge photo container on hover */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
+}
+
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.photo-container:hover .caption {
+    opacity: 1; /* Show caption on hover */
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Footer styling */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+/* Additional CSS for blog-style layout */
+/* Additional CSS for blog-style layout */
+.blog-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 50px;
+    overflow: hidden;
+}
+
+.blog-post {
+    flex: 0 0 calc(50% - 20px);
+    margin: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.blog-post img {
+    width: 100%; /* Set width to 100% */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.blog-post:hover img {
+    transform: scale(1.05);
+}
+
+.blog-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.blog-post:hover .blog-caption {
+    opacity: 1;
+}
+
 
 /* Animations */
 @keyframes fadeInUp {
@@ -139,10 +256,7 @@ button:active {
     height: 100vh;
 }
 
-.signup-form,
-.login-form {
-    width: 300px;
-}
+
 /* Centered Form */
 .centered-form {
     display: flex;
@@ -653,4 +767,47 @@ button:hover {
     padding: 10px;
     margin-bottom: 20px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Banner styles */
+.banner-container {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.banner-item {
+    flex: 0 0 100%;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation dots styles */
+.banner-dots {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #333;
 }

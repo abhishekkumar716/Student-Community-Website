@@ -6,7 +6,50 @@
     <title>Community - Student Community</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* CSS styles */
+        
+        .left-panel {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .left-panel ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .left-panel li {
+            margin-bottom: 10px;
+        }
+
+        .left-panel li a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .left-panel li a:hover {
+            background-color: #ddd;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .banner-form {
+            margin-bottom: 20px;
+        }
+
         .post {
             max-width: 600px;
             margin: 0 auto 20px;
@@ -53,7 +96,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="logo">
             <h1>Student Community</h1>
@@ -68,8 +110,18 @@
         </nav>
     </header>
 
-    <!-- Main Content -->
-    <div class="login-container">
+    <div class="left-panel">
+        <h2>Admin Options</h2>
+        <ul>
+            <li><a href="#" onclick="dashboard()">Dashboard</a></li>
+            <li><a href="#" onclick="viewPosts()">View Posts</a></li>
+            <li><a href="#" onclick="addEvent()">Add Event</a></li>
+            <li><a href="#" onclick="viewRegistrations()">View Registrations</a></li>
+            <li><a href="#" onclick="changeBanner()">Change Banner</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
         <main>
             <section id="post-form">
                 <h2>Create a Post</h2>
@@ -77,20 +129,29 @@
                 <input type="file" id="post-image" accept="image/*" required>
                 <button onclick="createPost()">Post</button>
             </section>
-    
+
             <section id="posts-container">
                 <!-- Posts will be dynamically inserted here -->
             </section>
         </main>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2024 Student Community</p>
     </footer>
-
-    <!-- JavaScript -->
+      
     <script src="script.js"></script>
-    
+    <script>
+        function logout() {
+            // Redirect the user to the home page
+            window.location.href = "index.html";
+        }
+        
+        function dashboard() {
+            // Redirect the user to the dashboard from where we can post 
+            window.location.href = "admincommunities.html";
+        }
+
+    </script>
 </body>
 </html>
