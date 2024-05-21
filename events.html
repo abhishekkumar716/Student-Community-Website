@@ -5,35 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - Student Community</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Additional styles for the events section */
-        section {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        .event-date {
-            color: #999;
-            font-size: 0.9em;
-        }
-        .add-event-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    
 </head>
 <body>
     <header>
@@ -59,23 +31,6 @@
             <h2>Events</h2>
             <p>Discover upcoming events:</p>
             <ul id="eventsList">
-                <li>
-                    <strong>Web Development Workshop</strong>
-                    <span class="event-date">- March 25th</span>
-                </li>
-                <li>
-                    <strong>Art Exhibition</strong>
-                    <span class="event-date">- April 10th</span>
-                </li>
-                <li>
-                    <strong>Football Tournament</strong>
-                    <span class="event-date">- April 15th</span>
-                </li>
-                <li>
-                    <strong>Music Concert</strong>
-                    <span class="event-date">- May 5th</span>
-                </li>
-                <!-- Add more events here -->
             </ul>
             
         </section>
@@ -85,31 +40,33 @@
         <p>&copy; 2024 Student Community</p>
     </footer>
     <script>
-        // Function to display events
-        function displayEvents() {
-            var events = JSON.parse(localStorage.getItem("events")) || [];
-            var eventsList = document.getElementById("eventsList");
+       // Function to display events
+function displayEvents() {
+    var events = JSON.parse(localStorage.getItem("events")) || [];
+    var eventsList = document.getElementById("eventsList");
 
-            eventsList.innerHTML = ""; // Clear existing events
+    eventsList.innerHTML = ""; // Clear existing events
 
-            events.forEach(event => {
-                var eventItem = document.createElement("div");
-                eventItem.classList.add("event-item");
-                eventItem.textContent = event.name + " - " + event.date;
-                eventsList.appendChild(eventItem);
-            });
-        }
+    events.forEach(event => {
+        var eventItem = document.createElement("div");
+        eventItem.classList.add("event-item");
 
-        // Call displayEvents function when the page loads
-        window.onload = displayEvents;
+        // Format the date from ISO format to dd-mm-yyyy
+        var date = new Date(event.date);
+        var formattedDate = [
+            ('0' + date.getDate()).slice(-2), // Add leading zero and slice last two digits
+            ('0' + (date.getMonth() + 1)).slice(-2), // Months are 0-based, add leading zero
+            date.getFullYear()
+        ].join('-');
 
-        // Function to handle logout
-        function logout() {
-            // Clear session or local storage (e.g., remove the user data)
-            sessionStorage.removeItem("user");
-            // Redirect the user to the home page
-            window.location.href = "index.html";
-        }
+        eventItem.textContent = `${event.name} - ${formattedDate}`;
+        eventsList.appendChild(eventItem);
+    });
+}
+
+// Call displayEvents function when the page loads
+window.onload = displayEvents;
+
     </script>
     
 </body>

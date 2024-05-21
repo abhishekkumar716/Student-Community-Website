@@ -29,7 +29,7 @@
 <form id="loginForm">
     <input type="email" id="loginEmail" placeholder="Email" required><br>
     <input type="password" id="loginPassword" placeholder="Password" required><br>
-    <input class="cta-buttons" type="submit" onclick="comm()" value="Login">
+    <input class="cta-buttons" type="submit" value="Login">
 </div><br>
 </form>
 </div>
@@ -64,16 +64,14 @@
         });
 
         if (user) {
-            alert("Login successful!");
-            document.getElementById("loginForm").reset();
-        } else {
-            alert("Invalid email or password!");
-        }
-    });
-     function comm()
-     {
-        window.location.href="admincommunities.html";
-     }
+                alert("Login successful!");
+                document.getElementById("loginForm").reset();
+                window.location.href = "admincommunities.html";
+            } else {
+                alert("Invalid email or password!");
+            }
+        });
+     
 </script>
 <footer>
     <p>&copy; 2024 Student Community</p>

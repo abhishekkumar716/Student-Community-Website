@@ -5,55 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community - Student Community</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* CSS styles */
-        .post {
-            max-width: 600px;
-            margin: 0 auto 20px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .post-content {
-            margin-bottom: 10px;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .post-actions button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .post-actions button:hover {
-            background-color: #0056b3;
-        }
-
-        img {
-            max-width: 1000px;
-            max-height: 1000px;
-            width: auto;
-            height: auto;
-        }
-    </style>
+    
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="logo">
             <h1>Student Community</h1>
@@ -68,7 +22,6 @@
         </nav>
     </header>
 
-    <!-- Main Content -->
     <div class="login-container">
         <main>
             <section id="post-form">
@@ -84,13 +37,38 @@
         </main>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2024 Student Community</p>
     </footer>
 
-    <!-- JavaScript -->
     <script src="script.js"></script>
-    
+    <script>
+        function logout() {
+            // Redirect the user to the home page
+            window.location.href = "index.html";
+        }
+
+        function createPost() {
+            var content = document.getElementById("post-content").value;
+            var image = document.getElementById("post-image").files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function() {
+                var posts = JSON.parse(localStorage.getItem("posts")) || [];
+                var post = {
+                    content: content,
+                    image: reader.result,
+                    username: "student" // Replace with dynamic student username
+                };
+                posts.unshift(post);
+                localStorage.setItem("posts", JSON.stringify(posts));
+                displayPost(post);
+            };
+
+            if (image) {
+                reader.readAsDataURL(image);
+            }
+        }
+    </script>
 </body>
 </html>

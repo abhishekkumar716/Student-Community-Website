@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Student Community</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+  
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <h1>Student Community</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><span id="username-placeholder"></span></li>
+                <div class="cta-buttons">
+                    <li><a href="#" onclick="logout()" id="logout-btn">Logout</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="left-panel">
+        <h2>Admin Options</h2>
+        <ul>
+            <li><a href="#" onclick="dashboard()">Dashboard</a></li>
+            <li><a href="#" onclick="viewPosts()">View Posts</a></li>
+            <li><a href="#" onclick="addEvent()">Add Event</a></li>
+            <li><a href="#" onclick="viewRegistrations()">View Registrations</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <main class="login-container">
+            <section id="event-management">
+                <h2>Manage Events</h2>
+                <form id="add-event-form">
+                    <label for="event-name">Event Name:</label>
+                    <input type="text" id="event-name" name="event-name" required>
+                    
+                    <label for="event-date">Event Date:</label>
+                    <input type="date" id="event-date" name="event-date" required>
+                    
+                    <button type="submit">Add Event</button>
+                </form>
+                <div id="events-list">
+                    <!-- Events will be listed here -->
+                </div>
+            </section>
+        </main>
+    </div>
+        
+    <footer>
+        <p>&copy; 2024 Student Community</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+
+
+        function logout() {
+            // Redirect the user to the home page
+            window.location.href = "index.html";
+        }
+
+        function dashboard() {
+            // Redirect the user to the dashboard from where we can post 
+            window.location.href = "admincommunities.html";
+        }
+
+        document.getElementById('add-event-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var eventName = document.getElementById('event-name').value;
+    var eventDate = document.getElementById('event-date').value;
+
+    if (eventName && eventDate) {
+        var events = JSON.parse(localStorage.getItem('events')) || [];
+        events.push({ name: eventName, date: eventDate });
+        localStorage.setItem('events', JSON.stringify(events));
+        alert('Event added successfully!');
+        displayEvents();
+
+        // Clear the input fields after adding the event
+        document.getElementById('event-name').value = '';
+        document.getElementById('event-date').value = '';
+    }
+});
+
+function displayEvents() {
+    var events = JSON.parse(localStorage.getItem('events')) || [];
+    var eventsList = document.getElementById('events-list');
+    eventsList.innerHTML = ''; // Clear previous entries
+
+    events.forEach(function(event, index) {
+        var eventDiv = document.createElement('div');
+        eventDiv.innerHTML = `<p>${event.name} - ${event.date}</p>
+                              <button onclick="deleteEvent(${index})">Delete</button>`;
+        eventsList.appendChild(eventDiv);
+    });
+}
+
+function deleteEvent(index) {
+    var events = JSON.parse(localStorage.getItem('events')) || [];
+    events.splice(index, 1); // Remove the event at the specified index
+    localStorage.setItem('events', JSON.stringify(events));
+    displayEvents(); // Refresh the list of events
+}
+
+window.onload = function() {
+    displayEvents(); // Display events when the page loads
+};
+
+    </script>
+</body>
+</html>

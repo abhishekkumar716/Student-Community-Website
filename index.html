@@ -6,6 +6,110 @@
     <title>Home - Student Community</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<style>
+    /* Banner styles */
+.banner-container {
+    width: 100%; /* Set width to 100% to make it responsive */
+    height: 300px; /* Keep the fixed height */
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-slide {
+    display: flex;
+    justify-content: center; /* Horizontally center the items */
+    align-items: center; /* Vertically center the items */
+    transition: transform 0.5s ease-in-out;
+}
+
+.banner-item {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Horizontally center the image */
+    align-items: center; /* Vertically center the image */
+}
+
+.banner-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation dots styles */
+.banner-dots {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #333;
+}
+
+/* Styles for the post container */
+#posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Ensure even spacing between columns */
+}
+
+/* Styles for each post */
+.post {
+    width: calc(50% - 20px); /* Set width to half of container width with margin */
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+/* Apply alternating layout */
+.post.alternate {
+    margin-left: auto; /* Push alternate posts to the right */
+    margin-right: 0; /* Reset right margin for alternate posts */
+}
+
+/* Ensure proper spacing between posts */
+.post:nth-child(odd) {
+    margin-right: 20px; /* Add margin to the right of odd-indexed posts */
+}
+
+.post:nth-child(even) {
+    margin-left: 20px; /* Add margin to the left of even-indexed posts */
+}
+
+/* Styles for post content */
+.post p {
+    margin-bottom: 10px;
+}
+
+/* Styles for post images */
+.post-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for post user information */
+.post-user {
+    font-style: italic;
+    color: #888;
+}
+
+
+</style>
 <body>
     <header>
         <div class="logo">
@@ -62,11 +166,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script>
-        window.onload = function() {
+                window.onload = function() {
             displayBanner();
             displayPosts();
+            showSlides(slideIndex);
+            // Start automatic sliding
+            setInterval(function() {
+                plusSlides(1);
+            }, 3000); // Slide every 3 seconds
         };
-
+    
         function displayBanner() {
             var bannerUrl = localStorage.getItem("indexPageBanner");
             if (bannerUrl) {
@@ -77,73 +186,91 @@
                 bannerContainer.appendChild(bannerElement);
             }
         }
-
+    
         // Function to display both admin and student posts
         function displayPosts() {
-            var adminPosts = JSON.parse(localStorage.getItem("adminPosts")) || [];
-            var studentPosts = JSON.parse(localStorage.getItem("studentPosts")) || [];
-            var allPosts = adminPosts.concat(studentPosts);
-
+            var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    
             var postsContainer = document.getElementById("posts-container");
-            allPosts.forEach(function(post) {
+            posts.forEach(function(post) {
                 displayPost(post);
             });
         }
+    
+        //Function to display both admin and student posts
+function displayPosts() {
+    var posts = JSON.parse(localStorage.getItem("posts")) || [];
+    var postsContainer = document.getElementById("posts-container");
+    posts.forEach(function(post, index) {
+        displayPost(post, index);
+    });
+}
 
-        // Function to display a post
-        function displayPost(post) {
-            var postsContainer = document.getElementById("posts-container");
-            var postElement = document.createElement("div");
-            postElement.classList.add("post");
+// Function to display a post
+function displayPost(post, index) {
+    var postsContainer = document.getElementById("posts-container");
+    var postElement = document.createElement("div");
+    postElement.classList.add("post");
 
-            // Add post content (caption)
-            var postContentElement = document.createElement("p");
-            postContentElement.textContent = post.content;
-            postElement.appendChild(postContentElement);
+    // Add post content (caption)
+    var postContentElement = document.createElement("p");
+    postContentElement.textContent = post.content;
+    postElement.appendChild(postContentElement);
 
-            // Check if the post contains an image
-            if (post.image) {
-                var postImageElement = document.createElement("img");
-                postImageElement.src = post.image;
-                postImageElement.classList.add("post-image");
-                postElement.appendChild(postImageElement);
-            }
+    // Check if the post contains an image
+    if (post.image) {
+        var postImageElement = document.createElement("img");
+        postImageElement.src = post.image;
+        postImageElement.classList.add("post-image");
+        postElement.appendChild(postImageElement);
+    }
 
-            // Add email or username
-            var postUserElement = document.createElement("p");
-            postUserElement.textContent = "Posted by: " + (post.email || post.username);
-            postElement.appendChild(postUserElement);
+    // Add email or username
+    var postUserElement = document.createElement("p");
+    postUserElement.textContent = "Posted by: " + (post.email || post.username);
+    postElement.appendChild(postUserElement);
 
-            postsContainer.insertBefore(postElement, postsContainer.firstChild);
-        }
+    // Add the alternate class to every other post
+    if (index % 2 === 1) {
+        postElement.classList.add("alternate");
+    }
 
+    postsContainer.insertBefore(postElement, postsContainer.firstChild);
+}
+    
         // Banner slide functionality
-        let slideIndex = 0;
-        showSlides();
-
-        function showSlides() {
+        let slideIndex = 1; // Start from the first slide
+        showSlides(slideIndex); // Show the initial slide
+    
+        function showSlides(n) {
             let slides = document.querySelectorAll('.banner-item');
             let dots = document.querySelectorAll('.dot');
-
+    
+            // Hide all slides
             for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = 'none';
                 dots[i].classList.remove('active');
             }
-
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-
+    
+            // Check for overflow
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+    
+            // Show the selected slide
             slides[slideIndex - 1].style.display = 'block';
             dots[slideIndex - 1].classList.add('active');
-
-            setTimeout(showSlides, 10000); // Change image every 3 seconds
         }
-
+    
+        // Function to navigate to the next or previous slide
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+    
         // Function to navigate to a specific slide
         function currentSlide(n) {
-            showSlides();
-            slideIndex = n;
+            showSlides(slideIndex = n);
         }
     </script>
+    
 </body>
 </html>
