@@ -6,7 +6,143 @@
     <title>Community - Student Community</title>
     <link rel="stylesheet" href="style.css">
     <style>
-  
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    table, th, td {
+        border: 1px solid #dddddd;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .registration-list {
+        margin-top: 20px;
+    }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 21px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .left-panel {
+            background-color: #f4f4f4;
+            padding: 20px;
+            width: 250px;
+            position: fixed;
+            top: 70px; /* Height of the header */
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 900;
+        }
+        
+        .main-content {
+            margin-left: 270px; /* Width of the left panel + some margin */
+            padding-top: 90px; /* Height of the header + some padding */
+            padding-left: 20px;
+            padding-right: 20px;
+            flex-grow: 1;
+        }
+        
+        #posts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust min width as needed */
+            gap: 20px; /* Adjust gap between posts */
+        }
+        
+        .post {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            height: 300px; /* Set a fixed height for all posts */
+            overflow: hidden; /* Hide overflow content */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .post p {
+            margin-bottom: 10px;
+            flex-grow: 1; /* Allow paragraph to grow within the post */
+        }
+        
+        .post img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: auto; /* Center image horizontally */
+        }
+        
+        .posted-by {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: auto;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .left-panel {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding-top: 20px;
+            }
+        
+            .main-content {
+                margin-left: 0;
+                padding-top: 100px; /* Adjust for header */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header, footer {
+                padding: 10px;
+            }
+        
+            .left-panel {
+                padding: 10px;
+            }
+        
+            .main-content {
+                padding: 10px;
+            }
+        
+            .post {
+                padding: 10px;
+            }
+        }
+        #logout-btn {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                }
     </style>
 </head>
 
@@ -114,6 +250,86 @@ function deleteEvent(index) {
 window.onload = function() {
     displayEvents(); // Display events when the page loads
 };
+function viewRegistrations() {
+    var contentContainer = document.querySelector('.main-content');
+    contentContainer.innerHTML = '';
+    
+    var heading = document.createElement('h2');
+    heading.textContent = 'Registrations';
+    contentContainer.appendChild(heading);
+    
+    var registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+    if (registrations.length === 0) {
+        contentContainer.innerHTML += '<p>No registrations found.</p>';
+    } else {
+        var table = document.createElement('table');
+        var thead = document.createElement('thead');
+        var tbody = document.createElement('tbody');
+
+        var headerRow = document.createElement('tr');
+        var headers = ['Name', 'Roll Number', 'Sport'];
+        headers.forEach(function(header) {
+            var th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+
+        registrations.forEach(function(registration) {
+            var row = document.createElement('tr');
+
+            var nameCell = document.createElement('td');
+            nameCell.textContent = registration.name;
+            row.appendChild(nameCell);
+
+            var rollNoCell = document.createElement('td');
+            rollNoCell.textContent = registration.rollNo;
+            row.appendChild(rollNoCell);
+
+            var sportCell = document.createElement('td');
+            sportCell.textContent = registration.sport;
+            row.appendChild(sportCell);
+
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        contentContainer.appendChild(table);
+
+        // Add download button
+        var downloadButton = document.createElement('button');
+        downloadButton.textContent = 'Download Registrations';
+        downloadButton.addEventListener('click', function() {
+            downloadRegistrations(registrations);
+        });
+        contentContainer.appendChild(downloadButton);
+    }
+}
+
+function downloadRegistrations(registrations) {
+    var filename = 'registrations.csv';
+    var csv = 'Name,Roll Number,Sport\n';
+    registrations.forEach(function(registration) {
+        csv += registration.name + ',' + registration.rollNo + ',' + registration.sport + '\n';
+    });
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename);
+    } else {
+        var link = document.createElement('a');
+        if (link.download !== undefined) {
+            var url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
 
     </script>
 </body>

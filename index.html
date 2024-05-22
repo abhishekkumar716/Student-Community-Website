@@ -10,7 +10,7 @@
     /* Banner styles */
 .banner-container {
     width: 100%; /* Set width to 100% to make it responsive */
-    height: 300px; /* Keep the fixed height */
+    height: 400px; /* Keep the fixed height */
     overflow: hidden;
     position: relative;
 }
@@ -33,7 +33,7 @@
 
 .banner-img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 400px;
     object-fit: cover;
 }
 
@@ -109,6 +109,49 @@
 }
 
 
+/* Basic styling for the banner container */
+.banner-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Styling for the slide wrapper to hold all banner items */
+.banner-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Styling for each banner item */
+.banner-item {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ensuring the banner images are responsive */
+.banner-img {
+    width: 100%;
+    height: 400px;
+    display: block;
+}
+
+/* Media query for devices with a maximum width of 768px (tablets and below) */
+@media (max-width: 768px) {
+    .banner-item {
+        min-width: 100%;
+    }
+}
+
+/* Media query for devices with a maximum width of 480px (mobile phones and below) */
+@media (max-width: 480px) {
+    .banner-item {
+        min-width: 100%;
+    }
+}
+
+main {
+    padding: 0px;
+}
 </style>
 <body>
     <header>
@@ -117,6 +160,7 @@
         </div>
         <div class="cta-buttons">
             <a href="login.html" class="login-btn">Login</a>
+            <a href="adminlogin.html" class="login-btn">Admin Login</a>
         </div>
     </header>
 
@@ -133,14 +177,14 @@
         <div class="banner-container">
             <div class="banner-slide">
                 <div class="banner-item">
-                    <a href="sports_registration.html"><img src="img1" alt="Banner 1" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="banner1" alt="Banner 1" class="banner-img"></a>
                 </div>
                 
                 <div class="banner-item">
-                    <a href="registration.html"><img src="img2" alt="Banner 2" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="banner2" alt="Banner 2" class="banner-img"></a>
                 </div>
                 <div class="banner-item">
-                    <a href="registration.html"><img src="photo" alt="Banner 3" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="banner3" alt="Banner 3" class="banner-img"></a>
                 </div>
             </div>
         </div>

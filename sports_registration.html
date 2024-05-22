@@ -29,21 +29,22 @@
             <form action="#" method="POST" class="registration-form" id="registration-form">
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required aria-required="true">
+                    <input type="text" id="name" name="name" required>
                 </div>
                 <div class="form-group">
                     <label for="roll-no">Roll Number:</label>
-                    <input type="text" id="roll-no" name="roll-no" required aria-required="true">
+                    <input type="text" id="roll-no" name="roll-no" required>
                 </div>
                 <div class="form-group">
                     <label for="sport">Select Sport:</label>
-                    <select id="sport" name="sport" required aria-required="true">
+                    <select id="sport" name="sport" required>
                         <option value="">Select Sport</option>
                         <option value="Football">Football</option>
                         <option value="Cricket">Cricket</option>
                         <option value="Tennis">Tennis</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
                     <button type="submit">Submit</button>
                 </div>
@@ -58,23 +59,36 @@
     <script>
         document.getElementById("registration-form").addEventListener("submit", function(event) {
             event.preventDefault();
-            var name = document.getElementById("name").value;
-            var rollNo = document.getElementById("roll-no").value;
-            var sport = document.getElementById("sport").value;
 
-            var registration = {
-                name: name,
-                rollNo: rollNo,
-                sport: sport
-            };
+            if (isRegistrationOpen()) {
+                var name = document.getElementById("name").value;
+                var rollNo = document.getElementById("roll-no").value;
+                var sport = document.getElementById("sport").value;
 
-            var registrations = JSON.parse(localStorage.getItem("registrations")) || [];
-            registrations.push(registration);
-            localStorage.setItem("registrations", JSON.stringify(registrations));
+                var registration = {
+                    name: name,
+                    rollNo: rollNo,
+                    sport: sport
+                };
 
-            document.getElementById("registration-message").textContent = "Registration successful!";
-            document.getElementById("registration-form").reset();
+                var registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+                registrations.push(registration);
+                localStorage.setItem("registrations", JSON.stringify(registrations));
+
+                document.getElementById("registration-message").textContent = "Registration successful!";
+                document.getElementById("registration-message").style.color = "green";
+                document.getElementById("registration-form").reset();
+            } else {
+                document.getElementById("registration-message").textContent = "Registration closed. Limit reached!";
+                document.getElementById("registration-message").style.color = "red";
+            }
         });
+
+        function isRegistrationOpen() {
+            var registrationLimit = 6;
+            var registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+            return registrations.length < registrationLimit;
+        }
     </script>
 </body>
 </html>
