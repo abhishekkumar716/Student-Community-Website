@@ -10,10 +10,11 @@
     /* Banner styles */
 .banner-container {
     width: 100%; /* Set width to 100% to make it responsive */
-    height: 400px; /* Keep the fixed height */
+    height: auto;
     overflow: hidden;
     position: relative;
 }
+
 
 .banner-slide {
     display: flex;
@@ -25,17 +26,12 @@
 .banner-item {
     flex: 0 0 100%;
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     justify-content: center; /* Horizontally center the image */
     align-items: center; /* Vertically center the image */
 }
 
-.banner-img {
-    max-width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-}
 
 /* Navigation dots styles */
 .banner-dots {
@@ -43,6 +39,10 @@
     margin-top: 10px;
 }
 
+img {
+    max-width: 100%;
+    object-fit: fill;  
+}
 .dot {
     display: inline-block;
     width: 10px;
@@ -109,12 +109,6 @@
 }
 
 
-/* Basic styling for the banner container */
-.banner-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-}
 
 /* Styling for the slide wrapper to hold all banner items */
 .banner-slide {
@@ -122,18 +116,7 @@
     transition: transform 0.5s ease-in-out;
 }
 
-/* Styling for each banner item */
-.banner-item {
-    min-width: 100%;
-    box-sizing: border-box;
-}
 
-/* Ensuring the banner images are responsive */
-.banner-img {
-    width: 100%;
-    height: 400px;
-    display: block;
-}
 
 /* Media query for devices with a maximum width of 768px (tablets and below) */
 @media (max-width: 768px) {
@@ -177,14 +160,14 @@ main {
         <div class="banner-container">
             <div class="banner-slide">
                 <div class="banner-item">
-                    <a href="sports_registration.html"><img src="banner1.png" alt="Banner 1" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="test.png" alt="Banner 1" class="banner-img"></a>
                 </div>
                 
                 <div class="banner-item">
-                    <a href="sports_registration.html"><img src="banner2.png" alt="Banner 2" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="test2.png" alt="Banner 2" class="banner-img"></a>
                 </div>
                 <div class="banner-item">
-                    <a href="sports_registration.html"><img src="banner3.png" alt="Banner 3" class="banner-img"></a>
+                    <a href="sports_registration.html"><img src="test3.png" alt="Banner 3" class="banner-img"></a>
                 </div>
             </div>
         </div>
